@@ -1,20 +1,15 @@
 
-# InfSus – Sustav za upravljanje plesnim studijem
+# Dance Studio Management System
 
-Full-stack web aplikacija razvijena kao zajednički fakultetski projekt u sklopu kolegija Informacijski sustavi.
+### Informacijski sustav za upravljanje plesnim studijem
 
-Cilj projekta je izrada informacijskog sustava za upravljanje plesnim studijem, uključujući evidenciju plesnih skupina, trenera, članova i povezanih podataka.
+Full-stack web aplikacija razvijena kao zajednički fakultetski projekt u sklopu kolegija Informacijski sustavi na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu (FER).
 
-Aplikacija koristi React za korisničko sučelje, Java Spring Boot za backend te PostgreSQL za pohranu podataka.
+Cilj projekta je razvoj informacijskog sustava koji omogućuje organizaciju i upravljanje podacima plesnog studija, uključujući plesne skupine, trenere, članove i njihove međusobne odnose.
 
-## Korištene tehnologije
+Projekt obuhvaća razvoj korisničkog sučelja, implementaciju REST API-ja, poslovnu logiku i povezivanje s relacijskom bazom podataka.
 
-### Frontend
-- React
-- JavaScript
-- HTML i CSS
-- React Router
-- Axios
+## Tehnologije
 
 ### Backend
 - Java 17
@@ -23,49 +18,93 @@ Aplikacija koristi React za korisničko sučelje, Java Spring Boot za backend te
 - Spring Data JPA
 - Hibernate
 - Gradle
+- REST API
+
+### Frontend
+- React 18
+- JavaScript
+- HTML5 i CSS3
+- React Router
+- Axios
 
 ### Baza podataka
 - PostgreSQL
 
+### Alati
+- Git i GitHub
+- Gradle Wrapper
+- npm
+
 ## Funkcionalnosti
 
-Projekt sadrži komponente i API-je za:
+Aplikacija obuhvaća sljedeće funkcionalnosti:
 
-- Pregled i upravljanje plesnim skupinama
-- Dodavanje i uređivanje podataka o trenerima
-- Prikaz detalja pojedinih plesnih skupina
-- Upravljanje članovima i povezanim podacima
-- Navigaciju između različitih dijelova aplikacije
-- Komunikaciju frontenda i backenda putem REST API-ja
-- Pohranu i dohvat podataka korištenjem PostgreSQL baze
+- Pregled plesnih skupina i njihovih detalja
+- Dodavanje i uređivanje plesnih skupina
+- Pregled, dodavanje i uređivanje trenera
+- Evidenciju članova i njihovih povezanosti s plesnim skupinama na backendu
+- Upravljanje povezanošću trenera i plesnih skupina
+- REST API za dohvat, unos, izmjenu i brisanje podataka
+- Povezivanje React frontenda sa Spring Boot backendom
+- Pohranu i dohvat podataka iz PostgreSQL baze
 
-Dio funkcionalnosti razvijen je kao prototip te nije u potpunosti implementiran.
+Pojedini dijelovi korisničkog sučelja i funkcionalnosti nalaze se u prototipnoj fazi.
 
 ## Arhitektura aplikacije
 
-Aplikacija je organizirana u tri osnovna sloja:
+Projekt koristi višeslojnu arhitekturu koja razdvaja korisničko sučelje, poslovnu logiku i pristup podacima.
 
-**Frontend – React**
+### Frontend – React
 
-Korisničko sučelje omogućuje pregled, unos i uređivanje podataka. Komunikacija s backendom ostvaruje se putem HTTP zahtjeva korištenjem biblioteke Axios.
+React je korišten za izradu korisničkog sučelja. Navigacija između stranica implementirana je pomoću React Routera, dok se Axios koristi za komunikaciju s backend REST API-jem.
 
-**Backend – Spring Boot**
+### Backend – Spring Boot
 
-Backend obrađuje REST API zahtjeve, implementira poslovnu logiku i omogućuje komunikaciju s bazom podataka.
+Backend je organiziran kroz sljedeće slojeve:
 
-**Baza podataka – PostgreSQL**
+- **Controller** – obrada HTTP zahtjeva i REST API endpointi
+- **Service** – implementacija poslovne logike
+- **Repository** – pristup podacima putem Spring Data JPA
+- **Model** – entiteti i odnosi među podacima
+- **DTO** – objekti za prijenos podataka
 
-Podaci se pohranjuju u relacijsku bazu podataka, uz korištenje Spring Data JPA i Hibernate tehnologija.
+### Baza podataka – PostgreSQL
+
+PostgreSQL služi za pohranu podataka o članovima, trenerima, plesnim skupinama i njihovim međusobnim odnosima.
+
+Za objektno-relacijsko mapiranje koriste se Hibernate i Spring Data JPA.
 
 ## Struktura projekta
 
-Glavni dijelovi repozitorija:
-
-- `studifrontend/` – React frontend aplikacija
-- `studio/` – Java Spring Boot backend aplikacija
-- `studio/src/main/java/` – Java izvorni kod
-- `studio/src/main/resources/` – konfiguracija backenda
-- `README.md` – dokumentacija projekta
+```text
+dance-studio-management/
+│
+├── plesni-studio/                 # React frontend
+│   ├── public/
+│   ├── src/
+│   │   ├── components/
+│   │   ├── App.js
+│   │   └── index.js
+│   └── package.json
+│
+├── studio/                        # Spring Boot backend
+│   ├── src/
+│   │   ├── main/
+│   │   │   ├── java/com/ples/studio/
+│   │   │   │   ├── controller/
+│   │   │   │   ├── service/
+│   │   │   │   ├── repository/
+│   │   │   │   ├── model/
+│   │   │   │   └── exception/
+│   │   │   └── resources/
+│   │   │       └── application.properties
+│   │   └── test/
+│   ├── build.gradle
+│   └── gradlew
+│
+├── .gitignore
+└── README.md
+```
 
 ## Pokretanje projekta
 
@@ -80,73 +119,93 @@ Za lokalno pokretanje potrebni su:
 ### 1. Kloniranje repozitorija
 
 ```bash
-git clone https://github.com/bb53137/InfSus.git
-cd InfSus
+git clone https://github.com/bb53137/dance-studio-management.git
+cd dance-studio-management
 ```
 
 ### 2. Konfiguracija baze podataka
 
-Potrebno je kreirati lokalnu PostgreSQL bazu podataka i provjeriti konfiguraciju u datoteci:
+Kreirati lokalnu PostgreSQL bazu podataka naziva `Studio`.
+
+Postojeća konfiguracija nalazi se u:
 
 `studio/src/main/resources/application.properties`
 
-Podaci za pristup bazi postavljaju se pomoću varijabli okruženja:
+Konfigurirani JDBC URL:
+
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5433/Studio
+```
+
+Potrebno je osigurati da PostgreSQL koristi odgovarajući port ili prilagoditi lokalnu konfiguraciju.
+
+Podaci za pristup bazi koriste varijable okruženja:
 
 - `DB_USERNAME`
 - `DB_PASSWORD`
 
-Lozinke i drugi osjetljivi podaci ne smiju se spremati u repozitorij.
+Lozinke i ostali osjetljivi podaci ne pohranjuju se izravno u izvorni kod.
 
 ### 3. Pokretanje backenda
+
+Iz glavne mape projekta:
 
 ```bash
 cd studio
 ./gradlew bootRun
 ```
 
-Na Windowsu:
+Na Windowsu moguće je koristiti:
 
 ```bash
 ./gradlew.bat bootRun
 ```
 
+Backend se prema zadanoj Spring Boot konfiguraciji pokreće na portu 8080.
+
 ### 4. Pokretanje frontenda
 
-U zasebnom terminalu:
+U zasebnom terminalu, iz glavne mape projekta:
 
 ```bash
-cd studifrontend
+cd plesni-studio
 npm install
 npm start
 ```
 
-Za ispravan rad aplikacije potrebna je odgovarajuća konfiguracija baze i dostupnost backend API-ja.
+React razvojni poslužitelj prema zadanim postavkama koristi:
 
-Napomena: postupak pokretanja nije u potpunosti testiran u novom razvojnom okruženju.
+`http://localhost:3000`
 
-## Status projekta
+Za rad aplikacije potrebno je imati pokrenutu PostgreSQL bazu i backend servis.
 
-Projekt je razvijen u edukacijske svrhe tijekom studija računarstva.
+**Napomena:** Postupak pokretanja nije u potpunosti provjeren u novom razvojnom okruženju. Moguće su dodatne prilagodbe konfiguracije ili inicijalizacija podataka.
 
-Obuhvaća razvoj korisničkog sučelja, implementaciju REST API-ja, organizaciju backend logike i povezivanje s relacijskom bazom podataka.
+## Testiranje i status projekta
 
-Pojedine funkcionalnosti nisu u potpunosti dovršene te aplikacija nije namijenjena produkcijskoj uporabi.
+Projekt sadrži osnovne testne datoteke za frontend i backend.
+
+Aplikacija je razvijena u edukacijske svrhe kao fakultetski projekt te nije namijenjena produkcijskoj uporabi bez dodatnih sigurnosnih i funkcionalnih poboljšanja.
+
+Posebno je potrebno unaprijediti autentifikaciju, sigurno rukovanje korisničkim lozinkama, autorizaciju i zaštitu osobnih podataka.
 
 ## Timski rad
 
 Projekt su zajednički razvile dvije studentice u sklopu fakultetskog kolegija.
 
-Povijest Git commitova čuva izvorne doprinose i autorstvo tijekom razvoja.
+Ovaj repozitorij predstavlja zasebnu, očišćenu portfolio verziju zajedničkog projekta.
+
+Izvorna Git povijest nije prenesena u ovu verziju repozitorija.
 
 ## Moguća buduća poboljšanja
 
-- Dovršavanje preostalih funkcionalnosti
-- Poboljšanje validacije korisničkog unosa
-- Implementacija automatiziranih testova
-- Poboljšanje korisničkog sučelja
-- Dodavanje autentifikacije i autorizacije
-- Unaprjeđenje sigurnosti aplikacije
-- Priprema aplikacije za deployment
+- Dovršavanje preostalih frontend funkcionalnosti
+- Implementacija sigurne autentifikacije i autorizacije
+- Hashiranje i zaštita korisničkih lozinki
+- Poboljšanje validacije podataka i obrade pogrešaka
+- Proširenje automatiziranih testova
+- Poboljšanje korisničkog sučelja i responzivnosti
+- Konfiguracija aplikacije za deployment
 
 ## Licenca
 
